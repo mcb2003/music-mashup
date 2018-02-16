@@ -111,7 +111,7 @@ class mashup_ui(Gtk.Window):
         fade_duration.set_property("editable", True)
         adjustment = Gtk.Adjustment(0, 0, 100, 0.5, 5, 1)
         fade_duration.set_property("adjustment", adjustment)
-        self.fade_duration_column.pack_start(fade_duration, False)
+        self.fade_duration_column.pack_start(fade_duration, True)
         self.fade_duration_column.add_attribute(fade_duration, "text", 2)
         self.fade_duration_column.set_sort_column_id(2)
         list = Gtk.TreeView(self.file_store)
