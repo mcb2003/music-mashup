@@ -25,6 +25,7 @@ from pydub import AudioSegment
 
 #import the gtk modual
 from gi.repository import Gtk, Gio
+
 #create the mashup_ui class to house the user interface
 class mashup_ui(Gtk.Window):
     def __init__(self):
@@ -37,6 +38,8 @@ class mashup_ui(Gtk.Window):
         self.set_titlebar(self.header)
         self.file_tree = self.create_list()
         self.main_container.pack_start(self.file_tree, True, True, 0)
+        #some default variables
+        self.default_fade_duration = 1.0
         self.cleanup()
     
     def cleanup(self):
