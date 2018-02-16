@@ -56,5 +56,6 @@ class mashup_ui(Gtk.Window):
         self.export_button.set_tooltip_text("Export the final audio file.")
         self.export_button.connect("clicked",self.start_process)
         hb.pack_end(self.export_button)
+        return hb
 
 window = mashup_ui()
