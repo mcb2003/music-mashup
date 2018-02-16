@@ -35,6 +35,8 @@ class mashup_ui(Gtk.Window):
         self.add(self.main_container)
         self.header = self.create_headerbar()
         self.set_titlebar(self.header)
+        self.file_tree = self.create_list()
+        self.main_container.pack_start(self.file_tree,True,True,0)
         self.cleanup()
     
     def cleanup(self):
@@ -81,5 +83,25 @@ class mashup_ui(Gtk.Window):
         self.remove_button.connect("clicked",self.remove_audio_file)
         hb.pack_start(self.remove_button)
         return hb
+    
+    def create_list(self):
+        self.file_store = Gtk.ListStore(str,str,float)
+        #adds test items to the store
+        for i in range(0,10):
+            self.file_store.append(["Invinsible","/home/mikey/Music",3.0])
+            self.file_store.append(["Blank","/home/mikey/Documents/great-songs",2.0])
+        self.file_column = Gtk.TreeViewColumn("Track name, path and fade duration")
+        title = Gtk.CellRendererText()
+        path = Gtk.CellRendererText()
+        fade_duration = Gtk.CellRendererText()
+        self.file_column.pack_start(title,True)
+        self.file_column.pack_start(path,True)
+        self.file_column.pack_start(fade_duration,False)
+        self.file_column.add_attribute(title,"text",0)
+        self.file_column.add_attribute(path,"text",1)
+        self.file_column.add_attribute(fade_duration,"text",2)
+        list = Gtk.TreeView(self.file_store)
+        list.append_column(self.file_column)
+        return list
 
 window = mashup_ui()
