@@ -49,7 +49,7 @@ class mashup_ui(Gtk.Window):
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
         hb.set_title(self.get_title())
-        self.export_button = Gtk.Button()
+        self.export_button = Gtk.Button("Export")
         icon = Gio.ThemedIcon(name="document-export")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         self.export_button.add(image)
