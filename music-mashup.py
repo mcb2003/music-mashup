@@ -46,7 +46,7 @@ class mashup_ui(Gtk.Window):
     def start_process(self):
         pass
     
-    def open_file(self):
+    def add_audio_file(self):
         pass
     
     def create_headerbar(self):
@@ -61,14 +61,14 @@ class mashup_ui(Gtk.Window):
         self.export_button.set_tooltip_text("Export the final audio file.")
         self.export_button.connect("clicked",self.start_process)
         hb.pack_end(self.export_button)
-        self.open_button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="document-open")
+        self.add_button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="list-add")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-        self.open_button.set_image(image)
-        self.open_button.set_label("Open")
-        self.open_button.set_tooltip_text("Open an audio file to include in the project.")
-        self.open_button.connect("clicked",self.open_file)
-        hb.pack_start(self.open_button)
+        self.add_button.set_image(image)
+        self.add_button.set_label("add")
+        self.add_button.set_tooltip_text("add an audio file to the project.")
+        self.add_button.connect("clicked",self.add_audio_file)
+        hb.pack_start(self.add_button)
         return hb
 
 window = mashup_ui()
