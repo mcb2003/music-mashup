@@ -24,7 +24,7 @@ require_version("Gtk","3.0")
 from pydub import AudioSegment
 
 #import the gtk modual
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 #create the mashup_ui class to house the user interface
 class mashup_ui(Gtk.Window):
     def __init__(self):
@@ -42,9 +42,19 @@ class mashup_ui(Gtk.Window):
         self.show_all()
         Gtk.main()
     
+    
+    def start_process(self):
+        pass
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
         hb.set_title(self.get_title())
+        self.export_button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="document-export")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        self.export_button.add(image)
+        self.export_button.set_tooltip_text("Export the final audio file.")
+        self.export_button.connect("clicked",self.start_process)
+        hb.pack_end(self.export_button)
 
 window = mashup_ui()
