@@ -49,7 +49,24 @@ class mashup_ui(Gtk.Window):
         pass
     
     def add_audio_file(self,widget):
-        pass
+        dialog = Gtk.FileChooserDialog("Please choose an audio file", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print("File selected: " + dialog.get_filename())
+            path = dialog.get_filename().split("")
+            folder = path[:-1]
+            folder_path = "/"
+            for item in folder:
+                folder_path += item + "/"
+            file = path[-1]
+            filename = file.split(".")[:-1]
+            print(folder_path)
+            print(file)
+            print(filename)
+        dialog.destroy()
     
     def remove_audio_file(self,widget):
         model, iter = self.current_selection.get_selected()
