@@ -48,11 +48,12 @@ class mashup_ui(Gtk.Window):
     def start_process(self):
         pass
     
-    def add_audio_file(self):
+    def add_audio_file(self,widget):
         pass
     
-    def remove_audio_file(self):
-        pass
+    def remove_audio_file(self,widget):
+        model, iter = self.current_selection.get_selected()
+        model.remove(iter)
     
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
@@ -117,6 +118,7 @@ class mashup_ui(Gtk.Window):
         list.append_column(self.file_column)
         list.append_column(self.path_column)
         list.append_column(self.fade_duration_column)
+        self.current_selection = list.get_selection()
         return list
 
 window = mashup_ui()
