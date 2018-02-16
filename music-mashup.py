@@ -23,4 +23,18 @@ require_version("Gtk","2.0")
 #import the AudioSegment class from pydub
 from pydub import AudioSegment
 
+from gi.repository import Gtk
+#create the mashup_ui class to house the user interface
+class mashup_ui(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self,title="Music MashUp")
+        self.set_default_size(480,560)
+        self.set_size_request(480,560)
+        self.cleanup()
+    
+    def cleanup(self):
+        self.connect("delete-event",Gtk.main_quit)
+        self.show_all()
+        Gtk.main()
 
+window = mashup_ui()
