@@ -7,7 +7,7 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Music MashUp is distributed in the hope that it will be useful,
+#    Music MashUp is distributed in the hope that it will be useful, 
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
@@ -17,7 +17,7 @@
 
 #Import the require_version function to check that we have at least gtk+3.0
 from gi import require_version
-require_version("Gtk","3.0")
+require_version("Gtk", "3.0")
 #at this point, we know we've got at least gtk 2.
 
 #import the AudioSegment class from pydub
@@ -28,19 +28,19 @@ from gi.repository import Gtk, Gio
 #create the mashup_ui class to house the user interface
 class mashup_ui(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self,title="Music MashUp")
-        self.set_default_size(480,560)
-        self.set_size_request(480,560)
+        Gtk.Window.__init__(self, title="Music MashUp")
+        self.set_default_size(480, 560)
+        self.set_size_request(480, 560)
         self.main_container = Gtk.VBox(spacing=5)
         self.add(self.main_container)
         self.header = self.create_headerbar()
         self.set_titlebar(self.header)
         self.file_tree = self.create_list()
-        self.main_container.pack_start(self.file_tree,True,True,0)
+        self.main_container.pack_start(self.file_tree, True, True, 0)
         self.cleanup()
     
     def cleanup(self):
-        self.connect("delete-event",Gtk.main_quit)
+        self.connect("delete-event", Gtk.main_quit)
         self.show_all()
         Gtk.main()
     
@@ -64,7 +64,7 @@ class mashup_ui(Gtk.Window):
         self.export_button.set_image(image)
         self.export_button.set_label("Export")
         self.export_button.set_tooltip_text("Export the final audio file.")
-        self.export_button.connect("clicked",self.start_process)
+        self.export_button.connect("clicked", self.start_process)
         hb.pack_end(self.export_button)
         self.add_button = Gtk.Button()
         icon = Gio.ThemedIcon(name="list-add")
@@ -72,7 +72,7 @@ class mashup_ui(Gtk.Window):
         self.add_button.set_image(image)
         self.add_button.set_label("add")
         self.add_button.set_tooltip_text("add an audio file to the project.")
-        self.add_button.connect("clicked",self.add_audio_file)
+        self.add_button.connect("clicked", self.add_audio_file)
         hb.pack_start(self.add_button)
         self.remove_button = Gtk.Button()
         icon = Gio.ThemedIcon(name="list-remove")
@@ -80,29 +80,29 @@ class mashup_ui(Gtk.Window):
         self.remove_button.set_image(image)
         self.remove_button.set_label("remove")
         self.remove_button.set_tooltip_text("remove an audio file from the project.")
-        self.remove_button.connect("clicked",self.remove_audio_file)
+        self.remove_button.connect("clicked", self.remove_audio_file)
         hb.pack_start(self.remove_button)
         return hb
     
     def update_fade_duration(self, widget, path, value):
         self.file_store[path][-1] = float(value)
-        #print("value is now",self.file_store[path][-1])
+        #print("value is now", self.file_store[path][-1])
     
     def create_list(self):
-        self.file_store = Gtk.ListStore(str,str,float)
+        self.file_store = Gtk.ListStore(str, str, float)
         #adds test items to the store
-        for i in range(0,10):
-            self.file_store.append(["Invinsible","/home/mikey/Music",3.0])
-            self.file_store.append(["Blank","/home/mikey/Documents/great-songs",5.0])
+        for i in range(0, 10):
+            self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0])
+            self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0])
         self.file_column = Gtk.TreeViewColumn("Track name")
         title = Gtk.CellRendererText()
-        self.file_column.pack_start(title,True)
-        self.file_column.add_attribute(title,"text",0)
+        self.file_column.pack_start(title, True)
+        self.file_column.add_attribute(title, "text", 0)
         self.file_column.set_sort_column_id(0)
         self.path_column = Gtk.TreeViewColumn("Path")
         path = Gtk.CellRendererText()
-        self.path_column.pack_start(path,True)
-        self.path_column.add_attribute(path,"text",1)
+        self.path_column.pack_start(path, True)
+        self.path_column.add_attribute(path, "text", 1)
         self.path_column.set_sort_column_id(1)
         self.fade_duration_column = Gtk.TreeViewColumn("Fade Duration")
         fade_duration = Gtk.CellRendererSpin()
@@ -110,8 +110,8 @@ class mashup_ui(Gtk.Window):
         fade_duration.set_property("editable", True)
         adjustment = Gtk.Adjustment(0, 0, 100, 0.5, 5, 1)
         fade_duration.set_property("adjustment", adjustment)
-        self.fade_duration_column.pack_start(fade_duration,False)
-        self.fade_duration_column.add_attribute(fade_duration,"text",2)
+        self.fade_duration_column.pack_start(fade_duration, False)
+        self.fade_duration_column.add_attribute(fade_duration, "text", 2)
         self.fade_duration_column.set_sort_column_id(2)
         list = Gtk.TreeView(self.file_store)
         list.append_column(self.file_column)
