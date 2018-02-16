@@ -17,7 +17,7 @@
 
 #Import the require_version function to check that we have at least gtk+3.0
 from gi import require_version
-require_version("Gtk","2.0")
+require_version("Gtk","3.0")
 #at this point, we know we've got at least gtk 2.
 
 #import the AudioSegment class from pydub
@@ -33,11 +33,18 @@ class mashup_ui(Gtk.Window):
         self.set_size_request(480,560)
         self.main_container = Gtk.VBox(spacing=5)
         self.add(self.main_container)
+        self.header = self.create_headerbar()
+        self.set_titlebar(self.header)
         self.cleanup()
     
     def cleanup(self):
         self.connect("delete-event",Gtk.main_quit)
         self.show_all()
         Gtk.main()
+    
+    def create_headerbar(self):
+        hb = Gtk.HeaderBar()
+        hb.set_show_close_button(True)
+        hb.set_title(self.get_title())
 
 window = mashup_ui()
