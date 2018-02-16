@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Music MashUp.  If not, see <http://www.gnu.org/licenses/>.
 
-#Import the require_version function to check that we have at least gtk+2.0
+#Import the require_version function to check that we have at least gtk+3.0
 from gi import require_version
 require_version("Gtk","2.0")
 #at this point, we know we've got at least gtk 2.
@@ -23,6 +23,7 @@ require_version("Gtk","2.0")
 #import the AudioSegment class from pydub
 from pydub import AudioSegment
 
+#import the gtk modual
 from gi.repository import Gtk
 #create the mashup_ui class to house the user interface
 class mashup_ui(Gtk.Window):
@@ -30,6 +31,8 @@ class mashup_ui(Gtk.Window):
         Gtk.Window.__init__(self,title="Music MashUp")
         self.set_default_size(480,560)
         self.set_size_request(480,560)
+        self.main_container = Gtk.VBox(spacing=5)
+        self.add(self.main_container)
         self.cleanup()
     
     def cleanup(self):
