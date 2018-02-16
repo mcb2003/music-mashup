@@ -84,6 +84,10 @@ class mashup_ui(Gtk.Window):
         hb.pack_start(self.remove_button)
         return hb
     
+    def update_fade_duration(self, widget, path, value):
+        self.file_store[path][-1] = float(value)
+        #print("value is now",self.file_store[path][-1])
+    
     def create_list(self):
         self.file_store = Gtk.ListStore(str,str,float)
         #adds test items to the store
@@ -102,6 +106,7 @@ class mashup_ui(Gtk.Window):
         self.path_column.set_sort_column_id(1)
         self.fade_duration_column = Gtk.TreeViewColumn("Fade Duration")
         fade_duration = Gtk.CellRendererSpin()
+        fade_duration.connect("edited", self.update_fade_duration)
         fade_duration.set_property("editable", True)
         adjustment = Gtk.Adjustment(0, 0, 100, 0.5, 5, 1)
         fade_duration.set_property("adjustment", adjustment)
