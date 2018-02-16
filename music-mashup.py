@@ -15,3 +15,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Music MashUp.  If not, see <http://www.gnu.org/licenses/>.
 
+#Import the require_version function to check that we have at least gtk+2.0
+from gi import require_version
+require_version("Gtk","2.0")
+#at this point, we know we've got at least gtk 2.
+
+#import the AudioSegment class from pydub
+from pydub import AudioSegment
+
+
