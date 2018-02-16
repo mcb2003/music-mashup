@@ -49,6 +49,9 @@ class mashup_ui(Gtk.Window):
     def add_audio_file(self):
         pass
     
+    def remove_audio_file(self):
+        pass
+    
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
@@ -69,6 +72,14 @@ class mashup_ui(Gtk.Window):
         self.add_button.set_tooltip_text("add an audio file to the project.")
         self.add_button.connect("clicked",self.add_audio_file)
         hb.pack_start(self.add_button)
+        self.remove_button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="list-remove")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        self.remove_button.set_image(image)
+        self.remove_button.set_label("remove")
+        self.remove_button.set_tooltip_text("remove an audio file from the project.")
+        self.remove_button.connect("clicked",self.remove_audio_file)
+        hb.pack_start(self.remove_button)
         return hb
 
 window = mashup_ui()
