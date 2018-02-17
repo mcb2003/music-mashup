@@ -52,14 +52,14 @@ class mashup_ui(Gtk.Window):
         pass
     
     def add_audio_file(self,widget):
-        dialog = Gtk.FileChooserDialog("Please choose an audio file", self,
+        open_dialog = Gtk.FileChooseropen_dialog("Please choose an audio file", self,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-        response = dialog.run()
+        response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
-            print("File selected: " + dialog.get_filename())
-            path = dialog.get_filename().split("")
+            print("File selected: " + open_dialog.get_filename())
+            path = open_dialog.get_filename().split("")
             folder = path[:-1]
             folder_path = "/"
             for item in folder:
@@ -69,11 +69,12 @@ class mashup_ui(Gtk.Window):
             print(folder_path)
             print(file)
             print(filename)
-        dialog.destroy()
+        open_dialog.destroy()
     
     def remove_audio_file(self,widget):
         model, iter = self.current_selection.get_selected()
-        model.remove(iter)
+        if iter is not None:
+            model.remove(iter)
     
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
