@@ -166,6 +166,13 @@ class mashup_ui(Gtk.Window):
         self.file_store[path][-1] = float(value)
         #print("value is now", self.file_store[path][-1])
     
+    def on_list_selection_changed(self,selection):
+        model, selected = selection.get_selected()
+        if selected == None:
+            self.remove_button.set_sensitive(False)
+        else:
+            self.remove_button.set_sensitive(True)
+    
     def create_list(self):
         self.file_store = Gtk.ListStore(str, str, float)
         #adds test items to the store
@@ -196,6 +203,7 @@ class mashup_ui(Gtk.Window):
         list.append_column(self.path_column)
         list.append_column(self.fade_duration_column)
         self.current_selection = list.get_selection()
+        self.current_selection.connect("changed",self.on_list_selection_changed)
         return list
 
 window = mashup_ui()
