@@ -109,8 +109,8 @@ class mashup_ui(Gtk.Window):
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-        open_dialog.add_filter(self.file_filter_all)
         open_dialog.add_filter(self.file_filter_audio)
+        open_dialog.add_filter(self.file_filter_all)
         response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
             #print("File selected: " + open_dialog.get_filename())
