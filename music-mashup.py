@@ -38,8 +38,8 @@ class mashup_ui(Gtk.Window):
         self.set_titlebar(self.header)
         self.file_tree = self.create_list()
         self.main_container.pack_start(self.file_tree, True, True, 0)
-        #some default variables
-        self.default_fade_duration = 1.0
+        #call a function to set some default variables and create some objects
+        self.create_misc()
         self.cleanup()
     
     def cleanup(self):
@@ -47,6 +47,59 @@ class mashup_ui(Gtk.Window):
         self.show_all()
         Gtk.main()
     
+    def create_misc(self):
+        self.supported_mimetypes = ["audio/aiff",
+        "audio/aiff",
+"audio/basic",
+"audio/it",
+"audio/make",
+"audio/make.my.funk",
+"audio/mid",
+"audio/midi",
+"audio/mod",
+"audio/mpeg",
+"audio/mpeg3",
+"audio/nspaudio",
+"audio/s3m",
+"audio/tsp-audio",
+"audio/tsplayer",
+"audio/vnd.qcelp",
+"audio/voc",
+"audio/voxware",
+"audio/wav",
+"audio/x-adpcm",
+"audio/x-aiff",
+"audio/x-au",
+"audio/x-gsm",
+"audio/x-jam",
+"audio/x-liveaudio",
+"audio/xm"
+"audio/x-mid",
+"audio/x-midi",
+"audio/x-mod",
+"audio/x-mpeg",
+"audio/x-mpeg-3",
+"audio/x-mpequrl",
+"audio/x-nspaudio",
+"audio/x-pn-realaudio",
+"audio/x-pn-realaudio",
+"audio/x-pn-realaudio-plugin",
+"audio/x-psid",
+"audio/x-realaudio",
+"audio/x-twinvq",
+"audio/x-twinvq-plugin",
+"audio/x-vnd.audioexplosion.mjuicemediafile",
+"audio/x-voc",
+"audio/x-wav"]
+        #print self.supported_mimetypes
+        self.default_fade_duration = 1.0        #the default amount of time taken to fade from one track to another.
+        self.file_filter_all = Gtk.FileFilter()
+        self.file_filter_all.set_name("All Files")
+        self.file_filter_all.add_pattern("*")
+        self.file_filter_audio = Gtk.FileFilter()
+        self.file_filter_audio.set_name("Audio Files ")
+        for mimetype in self.supported_mimetypes:
+            self.file_filter_audio.add_mime_type(mimetype)
     
     def start_process(self):
         pass
@@ -56,9 +109,11 @@ class mashup_ui(Gtk.Window):
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        open_dialog.add_filter(self.file_filter_all)
+        open_dialog.add_filter(self.file_filter_audio)
         response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
-            print("File selected: " + open_dialog.get_filename())
+            #print("File selected: " + open_dialog.get_filename())
             path = open_dialog.get_filename().split("/")
             folder = path[:-1]
             folder_path = ""
@@ -66,9 +121,9 @@ class mashup_ui(Gtk.Window):
                 folder_path += item + "/"
             file = path[-1]
             filename = file.split(".")[:-1]
-            print(folder_path)
-            print(file)
-            print(filename)
+            #print(folder_path)
+            #print(file)
+            #print(filename)
             self.file_store.append([filename[0],folder_path,self.default_fade_duration])
         open_dialog.destroy()
     
