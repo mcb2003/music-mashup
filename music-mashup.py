@@ -125,12 +125,15 @@ class mashup_ui(Gtk.Window):
             #print(file)
             #print(filename)
             self.file_store.append([filename[0],folder_path,self.default_fade_duration])
+            self.export_button.set_sensitive(True)
         open_dialog.destroy()
     
     def remove_audio_file(self,widget):
         model, iter = self.current_selection.get_selected()
         if iter is not None:
             model.remove(iter)
+        if len(model) == 0:
+            self.export_button.set_sensitive(False)
     
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
