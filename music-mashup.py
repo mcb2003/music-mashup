@@ -121,10 +121,11 @@ class mashup_ui(Gtk.Window):
                 folder_path += item + "/"
             file = path[-1]
             filename = file.split(".")[:-1]
+            extention = file.split(".")[-1]
             #print(folder_path)
             #print(file)
             #print(filename)
-            self.file_store.append([filename[0],folder_path,self.default_fade_duration])
+            self.file_store.append([filename[0], folder_path, self.default_fade_duration, extention])
             self.export_button.set_sensitive(True)
         open_dialog.destroy()
     
@@ -177,11 +178,11 @@ class mashup_ui(Gtk.Window):
             self.remove_button.set_sensitive(True)
     
     def create_list(self):
-        self.file_store = Gtk.ListStore(str, str, float)
+        self.file_store = Gtk.ListStore(str, str, float, str)
         #adds test items to the store
         for i in range(0, 10):
-            self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0])
-            self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0])
+            self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0, "wav"])
+            self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0, "mp3"])
         self.file_column = Gtk.TreeViewColumn("Track name")
         title = Gtk.CellRendererText()
         self.file_column.pack_start(title, True)
