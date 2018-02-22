@@ -120,12 +120,16 @@ class mashup_ui(Gtk.Window):
             for item in folder:
                 folder_path += item + "/"
             file = path[-1]
-            filename = file.split(".")[:-1]
+            filename_list = list(file.split(".")[:-1])
+            filename = ""
+            for part in filename_list:
+                filename += "." + part
+            filename = filename[1:]
             extention = file.split(".")[-1]
             #print(folder_path)
             #print(file)
             #print(filename)
-            self.file_store.append([filename[0], folder_path, self.default_fade_duration, extention])
+            self.file_store.append([filename, folder_path, self.default_fade_duration, extention])
             self.export_button.set_sensitive(True)
         open_dialog.destroy()
     
