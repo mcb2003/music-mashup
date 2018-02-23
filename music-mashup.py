@@ -129,7 +129,8 @@ class mashup_ui(Gtk.Window):
             #print(folder_path)
             #print(file)
             #print(filename)
-            self.file_store.append([filename, folder_path, self.default_fade_duration, extention])
+            model, selection = self.current_selection.get_selected()
+            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, extention])
             self.export_button.set_sensitive(True)
         open_dialog.destroy()
     
