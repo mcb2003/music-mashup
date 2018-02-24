@@ -169,6 +169,7 @@ class mashup_ui(Gtk.Window):
         self.export_button.set_label("Export")
         self.export_button.set_tooltip_text("Export the final audio file.")
         self.export_button.connect("clicked", self.start_process)
+        self.export_button.set_sensitive(False)
         hb.pack_end(self.export_button)
         self.add_button = Gtk.Button()
         icon = Gio.ThemedIcon(name="list-add")
@@ -185,6 +186,7 @@ class mashup_ui(Gtk.Window):
         self.remove_button.set_label("remove")
         self.remove_button.set_tooltip_text("remove an audio file from the project.")
         self.remove_button.connect("clicked", self.remove_audio_file)
+        self.remove_button.set_sensitive(False)
         hb.pack_start(self.remove_button)
         return hb
     
@@ -202,9 +204,9 @@ class mashup_ui(Gtk.Window):
     def create_list(self):
         self.file_store = Gtk.ListStore(str, str, float, str)
         #adds test items to the store
-        for i in range(0, 10):
-            self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0, "wav"])
-            self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0, "mp3"])
+        #for i in range(0, 10):
+            #self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0, "wav"])
+            #self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0, "mp3"])
         self.file_column = Gtk.TreeViewColumn("Track name")
         title = Gtk.CellRendererText()
         self.file_column.pack_start(title, True)
