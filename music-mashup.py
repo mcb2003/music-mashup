@@ -38,6 +38,8 @@ class mashup_ui(Gtk.Window):
         self.set_titlebar(self.header)
         self.file_tree = self.create_list()
         self.main_container.pack_start(self.file_tree, True, True, 0)
+        self.no_items_widget = self.create_no_items_widget()
+        self.main_container.pack_start(self.no_items_widget,True,True,0)
         #call a function to set some default variables and create some objects
         self.create_misc()
         self.cleanup()
@@ -45,6 +47,7 @@ class mashup_ui(Gtk.Window):
     def cleanup(self):
         self.connect("delete-event", Gtk.main_quit)
         self.show_all()
+        self.file_tree.hide()
         Gtk.main()
     
     def create_misc(self):
@@ -100,6 +103,16 @@ class mashup_ui(Gtk.Window):
         self.file_filter_audio.set_name("Audio Files ")
         for mimetype in self.supported_mimetypes:
             self.file_filter_audio.add_mime_type(mimetype)
+        
+    def create_no_items_widget(self):
+        self.no_items_label = Gtk.Label()
+        self.no_items_label.set_markup("<big>Looks like you have no audio files yet.</big>")
+        self.no_items_add_button = Gtk.Button("Why not add some?")
+        self.no_items_add_button.connect("clicked",self.add_audio_file)
+        no_items_box = Gtk.VBox()
+        no_items_box.pack_start(self.no_items_label, False, False, 0)
+        no_items_box.pack_start(self.no_items_add_button, False, True, 0)
+        return no_items_box
     
     def start_process(self):
         pass
@@ -132,6 +145,8 @@ class mashup_ui(Gtk.Window):
             model, selection = self.current_selection.get_selected()
             self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, extention])
             self.export_button.set_sensitive(True)
+            self.file_tree.set_visible(True)
+            self.no_items_widget.hide()
         open_dialog.destroy()
     
     def remove_audio_file(self,widget):
@@ -140,6 +155,8 @@ class mashup_ui(Gtk.Window):
             model.remove(iter)
         if len(model) == 0:
             self.export_button.set_sensitive(False)
+            self.file_tree.hide()
+            self.no_items_widget.show()
     
     def create_headerbar(self):
         hb = Gtk.HeaderBar()
