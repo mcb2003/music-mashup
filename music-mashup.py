@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 #    Music MashUp    -    a program to generate fading audio files of song intros, usefull in music quizzes
 #    Copyright (C) 2018  Michael Connor Buchan
 #
