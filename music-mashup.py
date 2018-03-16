@@ -32,7 +32,7 @@ class mashup_ui(Gtk.Window):
         Gtk.Window.__init__(self, title="Music MashUp")
         self.set_default_size(480, 560)
         self.set_size_request(480, 560)
-        self.main_container = Gtk.VBox(spacing=5)
+        self.main_container = Gtk.VBox(spacing=12)
         self.add(self.main_container)
         self.header = self.create_headerbar()
         self.set_titlebar(self.header)
@@ -160,7 +160,7 @@ class mashup_ui(Gtk.Window):
             self.no_items_widget.show()
     
     def create_headerbar(self):
-        hb = Gtk.HeaderBar()
+        hb = Gtk.HeaderBar(spacing=6)
         hb.set_show_close_button(True)
         hb.set_title(self.get_title())
         self.export_button = Gtk.Button()
