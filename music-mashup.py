@@ -96,6 +96,7 @@ class mashup_ui(Gtk.Window):
 "audio/x-wav"]
         #print self.supported_mimetypes
         self.default_fade_duration = 1.0        #the default amount of time taken to fade from one track to another.
+        self.default_length = 1.0        #the length of the track, starting from the beginning
         self.file_filter_all = Gtk.FileFilter()
         self.file_filter_all.set_name("All Files")
         self.file_filter_all.add_pattern("*")
@@ -143,7 +144,7 @@ class mashup_ui(Gtk.Window):
             #print(file)
             #print(filename)
             model, selection = self.current_selection.get_selected()
-            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, extention])
+            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, self.default_length, extention])
             self.export_button.set_sensitive(True)
             self.file_tree.set_visible(True)
             self.no_items_widget.hide()
@@ -191,7 +192,11 @@ class mashup_ui(Gtk.Window):
         return hb
     
     def update_fade_duration(self, widget, path, value):
-        self.file_store[path][-1] = float(value)
+        self.file_store[path][2] = float(value)
+        #print("value is now", self.file_store[path][-1])
+    
+    def update_length(self, widget, path, value):
+        self.file_store[path][3] = float(value)
         #print("value is now", self.file_store[path][-1])
     
     def on_list_selection_changed(self,selection):
@@ -202,7 +207,7 @@ class mashup_ui(Gtk.Window):
             self.remove_button.set_sensitive(True)
     
     def create_list(self):
-        self.file_store = Gtk.ListStore(str, str, float, str)
+        self.file_store = Gtk.ListStore(str, str, float, float, str)
         #adds test items to the store
         #for i in range(0, 10):
             #self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0, "wav"])
@@ -226,10 +231,19 @@ class mashup_ui(Gtk.Window):
         self.fade_duration_column.pack_start(fade_duration, True)
         self.fade_duration_column.add_attribute(fade_duration, "text", 2)
         self.fade_duration_column.set_sort_column_id(2)
+        self.length_column = Gtk.TreeViewColumn("Length")
+        length = Gtk.CellRendererSpin()
+        length.connect("edited", self.update_length)
+        length.set_property("editable", True)
+        length.set_property("adjustment", adjustment)
+        self.length_column.pack_start(length, True)
+        self.length_column.add_attribute(length, "text", 3)
+        self.length_column.set_sort_column_id(3)
         list = Gtk.TreeView(self.file_store)
         list.append_column(self.file_column)
         list.append_column(self.path_column)
         list.append_column(self.fade_duration_column)
+        list.append_column(self.length_column)
         self.current_selection = list.get_selection()
         self.current_selection.connect("changed",self.on_list_selection_changed)
         return list
