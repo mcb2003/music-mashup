@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Mashed Potatoes
-GenericName=Audio Processor
-Comment=Create music montages
-Exec=com.github.mcb2003.music-mashup %f
-Type=Application
-Terminal=false
-Categories=AudioVideo;Audio;
-Keywords=sound;audio;mashup;montage;song;
