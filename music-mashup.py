@@ -39,7 +39,7 @@ class mashup_ui(Gtk.Window):
         self.file_tree = self.create_list()
         self.main_container.pack_start(self.file_tree, True, True, 0)
         self.no_items_widget = self.create_no_items_widget()
-        self.main_container.pack_start(self.no_items_widget,True,True,0)
+        self.main_container.pack_start(self.no_items_widget, True, True, 0)
         #call a function to set some default variables and create some objects
         self.create_misc()
         self.cleanup()
@@ -47,10 +47,12 @@ class mashup_ui(Gtk.Window):
     def cleanup(self):
         self.connect("delete-event", Gtk.main_quit)
         self.show_all()
+        # hide the file_tree until the user adds an item.
         self.file_tree.hide()
         Gtk.main()
     
     def create_misc(self):
+        # This is a list of all supported mime types for any audio file that is imported. This list may be incomplete and there may be unusible formats here, so feel free to change it if you find ffmpeg and/or pydub doesn't suport one of these, or supports something else.
         self.supported_mimetypes = ["audio/aiff",
         "audio/aiff",
 "audio/basic",
@@ -94,17 +96,21 @@ class mashup_ui(Gtk.Window):
 "audio/x-vnd.audioexplosion.mjuicemediafile",
 "audio/x-voc",
 "audio/x-wav"]
+        # Print the list of supported mime types.
         #print self.supported_mimetypes
         self.default_fade_duration = 1.0        #the default amount of time taken to fade from one track to another.
-        self.default_length = 1.0        #the length of the track, starting from the beginning
+        self.default_length = 10.0        #the length of the track, starting from the beginning
+        # Create the "all files" filter
         self.file_filter_all = Gtk.FileFilter()
         self.file_filter_all.set_name("All Files")
         self.file_filter_all.add_pattern("*")
+        # Create the "Audio Files" filter
         self.file_filter_audio = Gtk.FileFilter()
         self.file_filter_audio.set_name("Audio Files ")
         for mimetype in self.supported_mimetypes:
             self.file_filter_audio.add_mime_type(mimetype)
         
+    # This function creates a Gtk widget that displays the no items message and allows the user to add some files. It is only shown when the list of files is empty.
     def create_no_items_widget(self):
         self.no_items_label = Gtk.Label()
         self.no_items_label.set_markup("<big>Looks like you have no audio files yet.</big>")
@@ -115,9 +121,12 @@ class mashup_ui(Gtk.Window):
         no_items_box.pack_start(self.no_items_add_button, False, True, 0)
         return no_items_box
     
+    # This function starts to process the audio files and generate a final result.
+    # It is empty in this branch of the code for now, as I'm working on the interface first.
     def start_process(self):
         pass
     
+    # This function handles adding of an audio file to the current project, including the file chooser dialog.
     def add_audio_file(self,widget):
         open_dialog = Gtk.FileChooserDialog("Please choose an audio file", self,
             Gtk.FileChooserAction.OPEN,
@@ -127,38 +136,43 @@ class mashup_ui(Gtk.Window):
         open_dialog.add_filter(self.file_filter_all)
         response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
+            # Print the selected file to the console for debugging.
             #print("File selected: " + open_dialog.get_filename())
+            # Split the fine path into a list.
             path = open_dialog.get_filename().split("/")
-            folder = path[:-1]
-            folder_path = ""
+            folder = path[:-1]        # The enclosing folder's path.
+            folder_path = ""        # Stores a textual representation of the folder path instead of a list
             for item in folder:
                 folder_path += item + "/"
-            file = path[-1]
-            filename_list = list(file.split(".")[:-1])
-            filename = ""
+            file = path[-1]        # The selected file's name, with extension.
+            filename_list = list(file.split(".")[:-1])        # A list containing the name and extension of the file.
+            filename = ""       # Stores the file name withoug extension
             for part in filename_list:
                 filename += "." + part
-            filename = filename[1:]
-            extention = file.split(".")[-1]
+            filename = filename[1:]        # Get rid of the first '.'
+            extention = file.split(".")[-1]        # Stores the file extension
+            # Print out some of these variables for debugging
             #print(folder_path)
             #print(file)
             #print(filename)
             model, selection = self.current_selection.get_selected()
-            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, self.default_length, extention])
-            self.export_button.set_sensitive(True)
+            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, self.default_length, extention])        # Add the item to the list
+            self.export_button.set_sensitive(True)        # Now that we've added an item, we should allow the user to export their project.
             self.file_tree.set_visible(True)
-            self.no_items_widget.hide()
+            self.no_items_widget.hide()        # We've added an item, so we don't need the no items message.
         open_dialog.destroy()
     
+    # This function is run when the user removes an audio file from the project
     def remove_audio_file(self,widget):
         model, iter = self.current_selection.get_selected()
         if iter is not None:
             model.remove(iter)
         if len(model) == 0:
-            self.export_button.set_sensitive(False)
+            self.export_button.set_sensitive(False)        # There are no audio files, so the user can't export nothing.
             self.file_tree.hide()
             self.no_items_widget.show()
     
+    # This function generates the main headerbar with all of the buttons to add, remove and manipulate files in the project, as well as exporting it
     def create_headerbar(self):
         hb = Gtk.HeaderBar(spacing=6)
         hb.set_show_close_button(True)
@@ -187,18 +201,23 @@ class mashup_ui(Gtk.Window):
         self.remove_button.set_label("remove")
         self.remove_button.set_tooltip_text("remove an audio file from the project.")
         self.remove_button.connect("clicked", self.remove_audio_file)
-        self.remove_button.set_sensitive(False)
+        self.remove_button.set_sensitive(False)        # By default, you can't remove a file, because there isn't one to remove.
         hb.pack_start(self.remove_button)
         return hb
     
+    # This function updates the Gtk.ListStore data when the user manipulates the fade duration value.
     def update_fade_duration(self, widget, path, value):
         self.file_store[path][2] = float(value)
+        # Print what we've just stored for debugging
         #print("value is now", self.file_store[path][-1])
     
+    # This function updates the Gtk.ListStore data when the user manipulates the length value.
     def update_length(self, widget, path, value):
         self.file_store[path][3] = float(value)
+        # Print what we've just stored for debugging
         #print("value is now", self.file_store[path][-1])
     
+    # This function is ran whenever the user selects an item in the list
     def on_list_selection_changed(self,selection):
         model, selected = selection.get_selected()
         if selected == None:
@@ -206,9 +225,10 @@ class mashup_ui(Gtk.Window):
         else:
             self.remove_button.set_sensitive(True)
     
+    # This function creates both the Gtk.ListStore for storing the data on the backend, but also creates the Gtk.TreeView widget for the frontend.
     def create_list(self):
         self.file_store = Gtk.ListStore(str, str, float, float, str)
-        #adds test items to the store
+        #adds test items to the store for debugging
         #for i in range(0, 10):
             #self.file_store.append(["Invinsible", "/home/mikey/Music", 3.0, "wav"])
             #self.file_store.append(["Blank", "/home/mikey/Documents/great-songs", 5.0, "mp3"])
@@ -248,4 +268,5 @@ class mashup_ui(Gtk.Window):
         self.current_selection.connect("changed",self.on_list_selection_changed)
         return list
 
+# Create the main object
 window = mashup_ui()
