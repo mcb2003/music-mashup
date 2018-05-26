@@ -139,7 +139,7 @@ class mashup_ui(Gtk.Window):
         response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
             selected_files = open_dialog.get_filenames()
-            selected_files.reverse        # Fixes a problem where all files are added in reverse order
+            selected_files.reverse()        # Fixes a problem where all files are added in reverse order
             for selected_file in selected_files:
                 # Print the selected file to the console for debugging.
                 #print("File selected: " + selected_file)
