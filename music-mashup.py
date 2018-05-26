@@ -132,31 +132,36 @@ class mashup_ui(Gtk.Window):
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        open_dialog.set_select_multiple(True)
+        open_dialog.set_local_only(True)
         open_dialog.add_filter(self.file_filter_audio)
         open_dialog.add_filter(self.file_filter_all)
         response = open_dialog.run()
         if response == Gtk.ResponseType.OK:
-            # Print the selected file to the console for debugging.
-            #print("File selected: " + open_dialog.get_filename())
-            # Split the fine path into a list.
-            path = open_dialog.get_filename().split("/")
-            folder = path[:-1]        # The enclosing folder's path.
-            folder_path = ""        # Stores a textual representation of the folder path instead of a list
-            for item in folder:
-                folder_path += item + "/"
-            file = path[-1]        # The selected file's name, with extension.
-            filename_list = list(file.split(".")[:-1])        # A list containing the name and extension of the file.
-            filename = ""       # Stores the file name withoug extension
-            for part in filename_list:
-                filename += "." + part
-            filename = filename[1:]        # Get rid of the first '.'
-            extention = file.split(".")[-1]        # Stores the file extension
-            # Print out some of these variables for debugging
-            #print(folder_path)
-            #print(file)
-            #print(filename)
-            model, selection = self.current_selection.get_selected()
-            self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, self.default_length, extention])        # Add the item to the list
+            selected_files = open_dialog.get_filenames()
+            selected_files.reverse        # Fixes a problem where all files are added in reverse order
+            for selected_file in selected_files:
+                # Print the selected file to the console for debugging.
+                #print("File selected: " + selected_file)
+                # Split the fine path into a list.
+                path = selected_file.split("/")
+                folder = path[:-1]        # The enclosing folder's path.
+                folder_path = ""        # Stores a textual representation of the folder path instead of a list
+                for item in folder:
+                    folder_path += item + "/"
+                file = path[-1]        # The selected file's name, with extension.
+                filename_list = list(file.split(".")[:-1])        # A list containing the name and extension of the file.
+                filename = ""       # Stores the file name withoug extension
+                for part in filename_list:
+                    filename += "." + part
+                filename = filename[1:]        # Get rid of the first '.'
+                extention = file.split(".")[-1]        # Stores the file extension
+                # Print out some of these variables for debugging
+                #print(folder_path)
+                #print(file)
+                #print(filename)
+                model, selection = self.current_selection.get_selected()
+                self.file_store.insert_after(selection,[filename, folder_path, self.default_fade_duration, self.default_length, extention])        # Add the item to the list
             self.export_button.set_sensitive(True)        # Now that we've added an item, we should allow the user to export their project.
             self.file_tree.set_visible(True)
             self.no_items_widget.hide()        # We've added an item, so we don't need the no items message.
